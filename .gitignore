@@ -1,0 +1,15 @@
+*.o
+*.d
+*.exe
+/coursework
+/filecrypt
+/build-ubuntu/
+/ig25560/
+*.pdf
+*.layout
+*.dev
+/Makefile.win
+/test.enc
+/test.txt
+/tests/last-report.json
+__pycache__/
