@@ -151,7 +151,7 @@ def main():
         expected_extension = ('.' + extension.rsplit('.', 1)[1]) if extension else ''
         require(blob[38:header_len] == expected_extension.encode(), 'wrong stored extension')
         require(len(blob) == header_len + (n // 16 + 1) * 16 + 32, 'wrong padded length')
-        keys = hashlib.pbkdf2_hmac('sha256', password, blob[5:21], 600000, 64)
+        keys = hashlib.pbkdf2_hmac('sha256', password, blob[5:21], 1200000, 64)
         require(hmac.compare_digest(hmac.digest(keys[32:], blob[:-32], 'sha256'), blob[-32:]), 'independent HMAC mismatch')
         require(aes(blob[header_len:-32], keys[:32], blob[21:37], decrypt=True) == plain, 'OpenSSL reference decryption mismatch')
         success(invoke('decrypt', encrypted, restored, password))
@@ -184,7 +184,7 @@ def main():
         for extension in ['', '.tar.gz', '.' + 'x' * 61]:
             case(f'extension boundary: {extension!r}', lambda e=extension: roundtrip(17, e))
         case('password maximum 200 bytes', lambda: roundtrip(16, password=b'x' * 200))
-        keys = hashlib.pbkdf2_hmac('sha256', PASSWORD, salt, 600000, 64)
+        keys = hashlib.pbkdf2_hmac('sha256', PASSWORD, salt, 1200000, 64)
         valid = fixture()
 
         def independent_input():
