@@ -1,4 +1,5 @@
-
+# Ubuntu / GCC / system OpenSSL 3.0.x (libssl-dev).
+# Run from this directory: make -f Makefil
 .DEFAULT_GOAL := all
 .DELETE_ON_ERROR:
 
@@ -8,7 +9,7 @@ CFLAGS ?= -std=c11 -O2 -g -Wall -Wextra -Wpedantic
 CPPFLAGS += -I.
 LDLIBS += -lcrypto
 
-TARGET := filecrypt
+TARGET := coursework
 BUILD_DIR := build-ubuntu
 
 SOURCES := main.c AES_Encrypt.c AES_Decrypt.c CBC.c input_mod.c \

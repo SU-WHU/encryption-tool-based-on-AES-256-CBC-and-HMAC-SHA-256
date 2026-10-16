@@ -13,10 +13,3 @@
 /test.txt
 /tests/last-report.json
 __pycache__/
-
-# Local submission packages and generated test data
-/ig25560.zip
-/output/
-/*.enc
-/tests/*-report.json
-/tests/*.log

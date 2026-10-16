@@ -71,7 +71,7 @@ int encryption(
 	header[1]=0x11;
 	header[2]=0x22;
 	header[3]=0x33;
-	header[4]=0x01;//version,represent the iteration of KDF
+	header[4]=0x01;//version 
 	memcpy(header+5, salt, 16);
 	memcpy(header+21, InitVector, 16);
 	header[37]=(unsigned char) extension_len;
