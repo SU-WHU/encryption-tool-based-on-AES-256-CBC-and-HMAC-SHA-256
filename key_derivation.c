@@ -8,14 +8,14 @@
 int kdf(
 	const unsigned char *user_key,
 	size_t user_key_len,
-	unsigned char *key4MAC,
-	unsigned char *key4Encrypt,
+	unsigned char *k_mac,
+	unsigned char *k_enc,
 	const unsigned char *salt
 ) {
 	if(salt == NULL) return -1;
 	if(user_key == NULL) return 0;
-	if(key4MAC == NULL) return 1;
-	if(key4Encrypt == NULL) return 2;
+	if(k_mac == NULL) return 1;
+	if(k_enc == NULL) return 2;
 
 	if(user_key_len > 200) return 3;
 	
@@ -27,7 +27,7 @@ int kdf(
 		(int)user_key_len, 
 		salt,
 		16,
-		600000,
+		1200000,
 		EVP_sha256(),
 		64,
 		out
@@ -35,8 +35,8 @@ int kdf(
 		OPENSSL_cleanse(out, sizeof(out));
 		return 4;
 	}
-	memcpy(key4Encrypt, out, 32);
-	memcpy(key4MAC, out + 32, 32);
+	memcpy(k_enc, out, 32);
+	memcpy(k_mac, out + 32, 32);
 	OPENSSL_cleanse(out, sizeof(out));
 	return 5;
 }

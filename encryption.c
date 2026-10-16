@@ -71,12 +71,13 @@ int encryption(
 	header[1]=0x11;
 	header[2]=0x22;
 	header[3]=0x33;
-	header[4]=0x01;
+	header[4]=0x01;//version 
 	memcpy(header+5, salt, 16);
 	memcpy(header+21, InitVector, 16);
 	header[37]=(unsigned char) extension_len;
 	if(extension_len > 0) memcpy(header+38, extension, extension_len);
 	header_len = 38 + extension_len;
+	
 	//generate header
 	
 	new_data = malloc(header_len);
@@ -90,14 +91,15 @@ int encryption(
 
 	if(read_file(path, &target, 2) != 7) goto cleanup;
 	
+	new_data = realloc(result.data, target.capacity+header_len+16);
+	if(new_data == NULL) goto cleanup;
+	result.data = new_data;
+	 
 	while(target.len - position >= 16){
 		memcpy(division, target.data+position, 16);
 		if(position == 0){
 			if(CBC(InitVector, division, 16) != 4) goto cleanup;
 			if(EncByAES(k_enc, division, buffer_output) != 1) goto cleanup;
-			new_data = realloc(result.data, result.len + 16);
-			if(new_data == NULL) goto cleanup;
-			result.data = new_data;
 			memcpy(result.data + result.len, buffer_output, 16);
 			result.len += 16;
 			position += 16;
@@ -105,9 +107,6 @@ int encryption(
 		else {
 			if(CBC(buffer_output, division, 16) != 4) goto cleanup;
 			if(EncByAES(k_enc, division, buffer_output) != 1) goto cleanup;
-			new_data = realloc(result.data, result.len + 16);
-			if(new_data == NULL) goto cleanup;
-			result.data = new_data;
 			memcpy(result.data + result.len, buffer_output, 16);
 			result.len += 16;
 			position += 16;
@@ -123,9 +122,6 @@ int encryption(
 			if(CBC(buffer_output, division, target.len - position) != 5) goto cleanup;
 		}
 		if(EncByAES(k_enc, division, buffer_output) != 1) goto cleanup;
-		new_data = realloc(result.data, result.len + 16);
-		if(new_data == NULL) goto cleanup;
-		result.data = new_data;
 		memcpy(result.data + result.len, buffer_output, 16);
 		result.len += 16;
 	}//the last block

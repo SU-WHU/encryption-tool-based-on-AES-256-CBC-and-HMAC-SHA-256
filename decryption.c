@@ -1,3 +1,4 @@
+
 #include "decryption.h"
 #include "AES_Decrypt.h"
 #include "CBC.h"
@@ -22,7 +23,7 @@ int decryption(
 	if(key == NULL) return 0;
 	if(path == NULL) return 0;
 	if(output_path == NULL) return 0;
-	if(target.data != NULL || target.len != 0 || target.capacity != 0) return 1;
+	if(target.data != NULL || target.len != 0 || target.capacity != 0) return 0;
 	//check if input is NULL
 	
 	
@@ -98,8 +99,7 @@ int decryption(
 
 	if (output_extension_len != extension_len ||
     	memcmp(output_extension, stored_extension, extension_len) != 0) {
-    	fprintf(stderr,
-            	"Output extension does not match the stored extension.\n");
+    	fprintf(stderr,"Output extension does not match the stored extension.\n");
     	goto cleanup;
 	}
 	//preventing from attackes by changing extension
@@ -150,7 +150,7 @@ int decryption(
 
 	if (written != result.len || close_status != 0) {
     	remove(output_path);
-    	fprintf(stderr, "Writing error: no enough space, content tampered or file error\n");
+    	//fprintf(stderr, "Writing error: no enough space, content tampered or file error\n");
     	goto cleanup;
 	}
 	free(target.data);
